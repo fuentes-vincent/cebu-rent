@@ -67,7 +67,7 @@ export default function Navbar() {
                   onClick={() => setShowAuthModal(true)}
                   className="hidden md:block text-sm font-medium text-neutral-800 py-3 px-4 rounded-full hover:bg-neutral-50 transition"
                 >
-                  Airbnb your home
+                  Rent a home
                 </button>
               )}
               
