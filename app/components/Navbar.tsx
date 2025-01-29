@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useState } from "react";
 import AuthModal from "@/components/auth/AuthModal";
+import Search from './navbar/Search';
 
 export default function Navbar() {
   const { user, signOut } = useAuthStore();
@@ -15,7 +16,7 @@ export default function Navbar() {
         <div className="py-4 border-b-[1px] border-neutral-200">
           <div className="flex items-center justify-between max-w-[2520px] mx-auto px-4 md:px-8">
             {/* Logo */}
-            <Link href="/" className="hidden md:flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <Image
                 src="/images/rent.svg"
                 alt="Rentify Logo"
@@ -26,31 +27,9 @@ export default function Navbar() {
               <span className="text-large font-bold text-neutral-800">Cebu-rent</span>
             </Link>
 
-            {/* Search Bar */}
-            <div className="flex items-center border rounded-full py-2 px-4 shadow-sm hover:shadow-md transition cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div className="text-sm font-medium text-neutral-800">Anywhere</div>
-                <div className="hidden sm:block border-l border-neutral-200 h-5"></div>
-                <div className="hidden sm:block text-sm font-medium text-neutral-800">Any week</div>
-                <div className="hidden sm:block border-l border-neutral-200 h-5"></div>
-                <div className="hidden sm:block text-sm text-neutral-600">Add guests</div>
-                <div className="bg-[#FF385C] p-2 rounded-full">
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    strokeWidth={2.5} 
-                    stroke="white" 
-                    className="w-4 h-4"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" 
-                    />
-                  </svg>
-                </div>
-              </div>
+            {/* Replace the old search div with the Search component */}
+            <div className="w-2/3">
+              <Search />
             </div>
 
             {/* Right Side */}
