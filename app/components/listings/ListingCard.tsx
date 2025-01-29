@@ -1,12 +1,15 @@
 import Image from "next/image";
 
 interface ListingCardProps {
-  id: string;
+  id: number;
   title: string;
   location: string;
   price: number;
   image_url: string;
   rating?: number;
+  category: string;
+  user_id: string;
+  created_at: string;
 }
 
 export default function ListingCard({

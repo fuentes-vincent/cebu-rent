@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabase';
 import Main from "./components/main";
 
 interface Listing {
-  id: string;
+  id: number;
   title: string;
   location: string;
   category: string;
