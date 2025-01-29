@@ -1,18 +1,24 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BiSearch } from 'react-icons/bi';
+import { useDebounce } from '@/hooks/useDebounce';
 
 export default function Search() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 300); // 300ms delay
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchTerm) return;
-    router.push(`/?search=${searchTerm}`);
-  };
+  useEffect(() => {
+    if (debouncedSearch !== undefined) {
+      if (debouncedSearch) {
+        router.push(`/?search=${debouncedSearch}`);
+      } else {
+        router.push('/');
+      }
+    }
+  }, [debouncedSearch, router]);
 
   return (
     <div className="border w-full py-2 rounded-full shadow-sm hover:shadow-md transition">
@@ -33,12 +39,9 @@ export default function Search() {
             bg-transparent
           "
         />
-        <button 
-          onClick={handleSearch}
-          className="p-2 bg-rose-500 rounded-full text-white mr-2"
-        >
+        <div className="p-2 bg-rose-500 rounded-full text-white mr-2">
           <BiSearch size={18} />
-        </button>
+        </div>
       </div>
     </div>
   );
