@@ -23,7 +23,7 @@ interface Listing {
 
 export default function Home() {
   const params = useSearchParams();
-  const category = params?.get('category');
+  const categoryParam = params?.get('category');
   const searchTerm = params?.get('search');
   const [listings, setListings] = useState<Listing[]>([]);
 
@@ -31,20 +31,34 @@ export default function Home() {
     const fetchListings = async () => {
       let query = supabase.from('Listing').select('*');
       
-      if (category) {
-        query = query.eq('category', category.toLowerCase());
+      if (categoryParam) {
+        query = query.eq('category', categoryParam);
+        console.log('Filtering by category:', categoryParam);
       }
 
       if (searchTerm) {
         query = query.or(`title.ilike.%${searchTerm}%,location.ilike.%${searchTerm}%`);
       }
 
-      const { data } = await query;
+      const { data, error } = await query;
+      
+      if (error) {
+        console.error('Error fetching listings:', error);
+        return;
+      }
+
+      if (data) {
+        const uniqueCategories = [...new Set(data.map(item => item.category))];
+        console.log('Available categories in DB:', uniqueCategories);
+      }
+
       setListings(data || []);
     };
 
     fetchListings();
-  }, [category, searchTerm]);
+  }, [categoryParam, searchTerm]);
+
+  console.log('Current category param:', categoryParam);
 
   return (
     <Container>
@@ -65,16 +79,17 @@ export default function Home() {
         </div>
       </div>
       <div className="max-w-[2520px] mx-auto px-4 sm:px-8 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {listings.map((listing) => (
-            <ListingCard
-              key={listing.id}
-              {...listing}
-            />
-          ))}
-          {listings.length === 0 && (
+        <div className="pt-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+          {listings.length > 0 ? (
+            listings.map((listing) => (
+              <ListingCard
+                key={listing.id}
+                {...listing}
+              />
+            ))
+          ) : (
             <div className="col-span-full text-center text-gray-500">
-              No properties found for your search.
+              No properties found for {categoryParam ? `category "${categoryParam}"` : 'your search'}.
             </div>
           )}
         </div>

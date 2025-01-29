@@ -85,28 +85,16 @@ export default function Categories() {
   const category = params?.get('category');
   const router = useRouter();
 
-  const handleClick = useCallback((categoryLabel: string) => {
-    let currentQuery = {};
-    
-    if (params) {
-      currentQuery = Object.fromEntries(params.entries());
+  const handleClick = useCallback((selectedCategory: string) => {
+    if (category === selectedCategory) {
+      router.push('/');
+    } else {
+      router.push(`/?category=${selectedCategory}`);
     }
-
-    const updatedQuery: { [key: string]: string | undefined } = {
-      ...currentQuery,
-      category: categoryLabel
-    };
-
-    if (params?.get('category') === categoryLabel) {
-      delete updatedQuery.category;
-    }
-
-    const url = new URLSearchParams(updatedQuery as any).toString();
-    router.push(`/?${url}`);
-  }, [router, params]);
+  }, [category, router]);
 
   return (
-    <div className="flex flex-row items-center justify-between overflow-x-auto pt-4">
+    <div className="pt-4 flex flex-row items-center justify-between overflow-x-auto">
       {categories.map((item) => (
         <CategoryBox
           key={item.label}
