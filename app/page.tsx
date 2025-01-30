@@ -62,11 +62,11 @@ export default function Home() {
 
   return (
     <Container>
-      <div className="max-w-[2520px] mx-auto px-4 sm:px-8 pt-28">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+      <div className="max-w-[2520px] mx-auto px-4 sm:px-8 md:pt-28">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 md:mb-4">
           {searchTerm ? `Search results for "${searchTerm}"` : 'Find your next stay'}
         </h1>
-        <p className="text-gray-600 text-lg mb-8">
+        <p className="text-base md:text-lg text-gray-600 mb-4 md:mb-8">
           {searchTerm 
             ? `Showing properties in ${searchTerm}`
             : 'Search low prices on hotels, homes, and much more...'
@@ -78,8 +78,8 @@ export default function Home() {
           <Categories />
         </div>
       </div>
-      <div className="max-w-[2520px] mx-auto px-4 sm:px-8 py-8">
-        <div className="pt-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+      <div className="max-w-[2520px] mx-auto px-4 sm:px-8 py-4 md:py-8">
+        <div className="md:pt-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 md:gap-8">
           {listings.length > 0 ? (
             listings.map((listing) => (
               <ListingCard
