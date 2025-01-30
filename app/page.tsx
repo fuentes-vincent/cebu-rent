@@ -5,7 +5,6 @@ import Container from '@/app/components/Container';
 import Categories from './components/categories/Categories';
 import ListingCard from './components/listings/ListingCard';
 import { supabase } from '@/lib/supabase';
-import Main from "./components/main";
 
 interface Listing {
   id: number;
