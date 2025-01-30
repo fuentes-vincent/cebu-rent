@@ -12,27 +12,30 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed w-full bg-white z-10">
+      {/* Desktop header */}
+      <header className="hidden md:block fixed w-full bg-white z-10">
         <div className="py-4 border-b-[1px] border-neutral-200">
-          <div className="flex items-center justify-between max-w-[2520px] mx-auto px-4 md:px-8">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <Image
-                src="/images/rent.svg"
-                alt="Rentify Logo"
-                width={32}
-                height={32}
-                priority
-              />
-              <span className="text-large font-bold text-neutral-800">Cebu-rent</span>
-            </Link>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between max-w-[2520px] mx-auto px-4 md:px-8">
+            {/* Top row - Logo and Menu */}
+            <div className="flex items-center justify-between w-full md:w-auto">
+              <Link href="/" className="flex items-center gap-2">
+                <Image
+                  src="/images/rent.svg"
+                  alt="Rentify Logo"
+                  width={32}
+                  height={32}
+                  priority
+                />
+                <span className="text-large font-bold text-neutral-800">Cebu-rent</span>
+              </Link>
+            </div>
 
-            {/* Replace the old search div with the Search component */}
-            <div className="w-2/3">
+            {/* Desktop search bar - Centered */}
+            <div className="hidden md:block md:w-1/3 md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
               <Search />
             </div>
 
-            {/* Right Side */}
+            {/* Right Side Menu */}
             <div className="flex items-center gap-4">
               {user ? (
                 <Link 
@@ -94,6 +97,61 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile header */}
+      <header className="md:hidden">
+        {/* Fixed top bar */}
+        <div className="fixed top-0 left-0 right-0 bg-white z-10">
+          <div className="py-4 border-b-[1px] border-neutral-200">
+            <div className="flex items-center justify-between max-w-[2520px] mx-auto px-4">
+              <Link href="/" className="flex items-center gap-2">
+                <Image
+                  src="/images/rent.svg"
+                  alt="Rentify Logo"
+                  width={32}
+                  height={32}
+                  priority
+                />
+                <span className="text-large font-bold text-neutral-800">Cebu-rent</span>
+              </Link>
+
+              {/* Mobile menu button */}
+              <div 
+                onClick={user ? () => signOut() : () => setShowAuthModal(true)}
+                className="p-4 border-[1px] border-neutral-200 rounded-full cursor-pointer hover:shadow-md transition"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  strokeWidth={1.5} 
+                  stroke="currentColor" 
+                  className="w-6 h-6 text-neutral-700"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" 
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content container with adjusted spacing */}
+        <div className="pt-[72px]">
+          {/* Search bar with increased top margin */}
+          <div className="bg-white px-4 py-2 mt-8">
+            <Search />
+          </div>
+
+          {/* Main content */}
+          <div className="px-4 mt-2">
+            {/* Your main content goes here */}
           </div>
         </div>
       </header>
