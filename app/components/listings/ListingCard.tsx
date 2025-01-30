@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface ListingCardProps {
   id: number;
@@ -13,14 +14,29 @@ interface ListingCardProps {
 }
 
 export default function ListingCard({
+  id,
   title,
   location,
   price,
   rating,
   image_url,
 }: ListingCardProps) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    console.log('Clicking listing with ID:', id); // Debug log
+    if (id) {
+      router.push(`/listings/${id}`);
+    } else {
+      console.error('No ID provided for listing:', title);
+    }
+  };
+
   return (
-    <div className="col-span-1 cursor-pointer group">
+    <div 
+      onClick={handleClick}
+      className="col-span-1 cursor-pointer group"
+    >
       <div className="aspect-square w-full relative overflow-hidden rounded-xl">
         <Image
           fill
@@ -39,7 +55,7 @@ export default function ListingCard({
         </div>
         <p className="text-sm text-gray-500">{title}</p>
         <p className="mt-2">
-          <span className="font-semibold">${price}</span>
+          <span className="font-semibold">₱{price.toLocaleString()}</span>
           <span className="text-gray-500"> night</span>
         </p>
       </div>

@@ -8,6 +8,12 @@ export type Listing = {
     category: string
     user_id: string
     created_at: string
+    description?: string
+    max_guests?: number
+    bedrooms?: number
+    bathrooms?: number
+    cleaning_fee?: number
+    service_fee?: number
 }
 
 export type User = {
