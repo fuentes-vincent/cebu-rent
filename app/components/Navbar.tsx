@@ -6,8 +6,10 @@ import { useState, useEffect, useRef } from "react";
 import AuthModal from "@/components/auth/AuthModal";
 import Search from './navbar/Search';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
+  const router = useRouter();
   const { user, signOut } = useAuthStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -44,8 +46,14 @@ export default function Navbar() {
   }, []);
 
   const handleSignOut = async () => {
-    await signOut();
-    setShowUserMenu(false);
+    try {
+      await signOut();
+      setShowUserMenu(false);
+      router.push('/'); // Redirect to home page
+      router.refresh(); // Refresh the page to update the UI
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   // Add this function to get initials from email
