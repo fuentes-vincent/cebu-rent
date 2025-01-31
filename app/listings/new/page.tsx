@@ -10,39 +10,56 @@ export default function NewListing() {
   const router = useRouter();
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     location: '',
     price: '',
-    rating: '5.0',
+    rating: 5.0,
     image_url: '',
-    category: 'apartment'
+    category: ''
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user) {
+      setError('You must be logged in to create a listing');
+      return;
+    }
     
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('listings')
+      setError(null);
+
+      // Validate price is a number
+      const price = parseFloat(formData.price);
+      if (isNaN(price)) {
+        throw new Error('Price must be a valid number');
+      }
+
+      const { data, error: supabaseError } = await supabase
+        .from('Listing') // Note: Match the exact table name
         .insert([
           {
-            ...formData,
-            price: parseFloat(formData.price),
-            rating: parseFloat(formData.rating),
+            title: formData.title,
+            location: formData.location,
+            price: price,
+            rating: formData.rating,
+            image_url: formData.image_url,
+            category: formData.category,
             user_id: user.id
           }
         ])
         .select()
         .single();
 
-      if (error) throw error;
+      if (supabaseError) throw supabaseError;
+
       router.push('/');
       router.refresh();
     } catch (error) {
       console.error('Error creating listing:', error);
+      setError(error instanceof Error ? error.message : 'Error creating listing');
     } finally {
       setLoading(false);
     }
@@ -50,6 +67,12 @@ export default function NewListing() {
 
   return (
     <div className="max-w-[2520px] mx-auto px-4 sm:px-6 pt-28">
+      {error && (
+        <div className="max-w-md mx-auto mb-4 p-4 bg-red-50 text-red-500 rounded-md">
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold mb-6">Create a New Listing</h1>
         
@@ -83,6 +106,8 @@ export default function NewListing() {
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: e.target.value })}
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+              min="0"
+              step="0.01"
               required
             />
           </div>
@@ -104,7 +129,7 @@ export default function NewListing() {
               required
             >
               {categories.map((category) => (
-                <option key={category.label} value={category.label.toLowerCase()}>
+                <option key={category.label} value={category.label}>
                   {category.label}
                 </option>
               ))}

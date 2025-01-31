@@ -1,44 +1,28 @@
 import { create } from 'zustand'
 import { supabase } from '@/lib/supabase'
-import { User } from '@/types'
+import { User } from '@supabase/supabase-js'
 
 interface AuthState {
     user: User | null
-    isLoading: boolean
-    signIn: (email: string, password: string) => Promise<void>
+    setUser: (user: User | null) => void
     signOut: () => Promise<void>
-    // ... other auth methods
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
     user: null,
-    isLoading: false,
-
-    signIn: async (email, password) => {
-        try {
-            set({ isLoading: true })
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password,
-            })
-            if (error) throw error
-            set({ user: data.user })
-        } catch (error) {
-            console.error('Error signing in:', error)
-        } finally {
-            set({ isLoading: false })
-        }
-    },
-
+    setUser: (user) => set({ user }),
     signOut: async () => {
-        try {
-            set({ isLoading: true })
-            await supabase.auth.signOut()
-            set({ user: null })
-        } catch (error) {
-            console.error('Error signing out:', error)
-        } finally {
-            set({ isLoading: false })
-        }
+        await supabase.auth.signOut()
+        set({ user: null })
     },
-})) 
+}))
+
+// Initialize auth state
+supabase.auth.getSession().then(({ data: { session } }) => {
+    useAuthStore.getState().setUser(session?.user ?? null)
+})
+
+// Listen for auth changes
+supabase.auth.onAuthStateChange((_event, session) => {
+    useAuthStore.getState().setUser(session?.user ?? null)
+}) 
