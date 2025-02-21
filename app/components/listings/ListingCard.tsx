@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface ListingCardProps {
   id: number;
@@ -22,6 +23,10 @@ export default function ListingCard({
   image_url,
 }: ListingCardProps) {
   const router = useRouter();
+  // Random Unsplash property image as fallback
+  const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=2070";
+
+  const [imgSrc, setImgSrc] = useState(image_url || FALLBACK_IMAGE);
 
   const handleClick = () => {
     console.log('Clicking listing with ID:', id); // Debug log
@@ -40,9 +45,12 @@ export default function ListingCard({
       <div className="aspect-square w-full relative overflow-hidden rounded-xl">
         <Image
           fill
-          src={image_url}
+          src={imgSrc}
           alt={title}
           className="object-cover w-full h-full transition group-hover:scale-110"
+          onError={() => {
+            setImgSrc(FALLBACK_IMAGE);
+          }}
         />
       </div>
       <div className="mt-4">
