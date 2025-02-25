@@ -37,7 +37,7 @@ export default function NewListing() {
         throw new Error('Price must be a valid number');
       }
 
-      const { data, error: supabaseError } = await supabase
+      const { error: supabaseError } = await supabase
         .from('Listing') // Note: Match the exact table name
         .insert([
           {

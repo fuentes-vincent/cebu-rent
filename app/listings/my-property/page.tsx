@@ -71,7 +71,7 @@ export default function MyListings() {
           <div className="text-center py-10 text-red-500">{error}</div>
         ) : listings.length === 0 ? (
           <div className="text-center py-10">
-            <p className="text-gray-500 mb-4">You haven't created any listings yet.</p>
+            <p className="text-gray-500 mb-4">You have not created any listings yet.</p>
             <Link
               href="/listings/new"
               className="bg-rose-500 text-white px-6 py-3 rounded-md hover:bg-rose-600 transition inline-block"
