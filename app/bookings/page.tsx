@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/store/useAuthStore';
-import type { Reservation } from '@/app/types';
+import type { Reservation, Listing } from '@/app/types';
 
 export default function BookingsPage() {
   const router = useRouter();
   const { user } = useAuthStore();
-  const [bookings, setBookings] = useState<(Reservation & { Listing: any })[]>([]);
+  const [bookings, setBookings] = useState<(Reservation & { Listing: Listing })[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function BookingsPage() {
       
       {bookings.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500">You don't have any bookings yet.</p>
+          <p className="text-gray-500">You dont have have any bookings yet.</p>
         </div>
       ) : (
         <div className="grid gap-6">

@@ -130,6 +130,13 @@ export default function Navbar() {
                         My Properties
                       </Link>
                       <Link 
+                        href="/bookings"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={handleMenuItemClick}
+                      >
+                        Bookings
+                      </Link>
+                      <Link 
                         href="/listings/new"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={handleMenuItemClick}
