@@ -27,6 +27,16 @@ export default function ListingPage() {
       try {
         console.log('Fetching listing with ID:', params.id); // Debug log
 
+        // Convert params.id to a number since the database uses bigint
+        const listingId = parseInt(params.id as string, 10);
+        
+        if (isNaN(listingId)) {
+          console.error('Invalid listing ID format:', params.id);
+          setError('Invalid listing ID format');
+          setLoading(false);
+          return;
+        }
+
         // Make sure 'Listing' matches your exact table name in Supabase
         const { data, error } = await supabase
           .from('Listing') // Capitalize if your table is named 'Listing'
@@ -41,7 +51,7 @@ export default function ListingPage() {
             user_id,
             created_at
           `)
-          .eq('id', params.id)
+          .eq('id', listingId)
           .single();
 
         console.log('Fetched data:', data); // Debug log
@@ -79,7 +89,9 @@ export default function ListingPage() {
     const start = new Date(reservationData.checkIn);
     const end = new Date(reservationData.checkOut);
     const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-    return listing.price * nights;
+    // Use a default price of 0 if listing.price is null
+    const price = listing.price ?? 0;
+    return price * nights;
   };
 
   const handleReserve = () => {
@@ -102,12 +114,21 @@ export default function ListingPage() {
       if (!user || !listing) return;
 
       const totalAmount = calculateTotalPrice();
+      
+      // Convert params.id to a number since the database uses bigint
+      const listingId = parseInt(params.id as string, 10);
+      
+      if (isNaN(listingId)) {
+        console.error('Invalid listing ID format:', params.id);
+        alert('Invalid listing ID format');
+        return;
+      }
 
       // Create reservation record
       const { data: reservation, error: reservationError } = await supabase
         .from('Reservations')
         .insert({
-          listing_id: parseInt(params.id as string), // Convert string ID to number
+          listing_id: listingId, // Use the converted ID
           user_id: user.id,
           check_in: reservationData.checkIn,
           check_out: reservationData.checkOut,
@@ -239,7 +260,7 @@ export default function ListingPage() {
             <div className="sticky top-28 border rounded-xl p-6 shadow-lg">
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <span className="text-2xl font-bold">₱{listing?.price.toLocaleString()}</span>
+                  <span className="text-2xl font-bold">₱{(listing?.price ?? 0).toLocaleString()}</span>
                   <span className="text-gray-500"> night</span>
                 </div>
               </div>

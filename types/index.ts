@@ -1,11 +1,11 @@
 export type Listing = {
     id: number
-    title: string
-    location: string
-    price: number
-    rating: number
-    image_url: string
-    category: string
+    title: string | null
+    location: string | null
+    price: number | null
+    rating: number | null
+    image_url: string | null
+    category: string | null
     user_id: string
     created_at: string
     description?: string
@@ -23,4 +23,4 @@ export type User = {
     user_metadata?: {
         avatar_url?: string
     }
-} 
+}
